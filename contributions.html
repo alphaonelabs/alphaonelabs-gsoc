@@ -1310,7 +1310,7 @@
       const tbody = document.getElementById('leaderboard-body');
       tbody.innerHTML = '';
       
-      const topRanks = ['��', '🥈', '🥉'];
+      const topRanks = ['🥇', '🥈', '🥉'];
       
       leaderboard.forEach((user, index) => {
         let rankStr = index < 3 ? `<span style="font-size:1.3rem;">${topRanks[index]}</span>` : `#${index + 1}`;
