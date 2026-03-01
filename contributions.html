@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alpha One Labs - Google Summer of Code 2026</title>
+  <title>Alpha One Labs - Contributions</title>
   <meta name="description" content="Join Alpha One Labs for Google Summer of Code 2026. Contribute to open-source education projects and grow your skills.">
   <link rel="icon" href="image.png" type="image/png">
 
@@ -292,33 +292,9 @@
       max-width: 800px;
       margin: 40px auto 0;
       background: var(--bg-card);
-      border-radius: 14px;
-      overflow: hidden;
-      position: relative;
-      padding: 2px;
-      box-shadow: 0 0 40px rgba(0, 255, 170, 0.15);
-    }
-    .leaderboard-table-wrap::before {
-      content: '';
-      position: absolute;
-      top: -50%; left: -50%;
-      width: 200%; height: 200%;
-      background: conic-gradient(transparent, var(--accent-cyan), transparent 30%);
-      animation: rotate-border 4s linear infinite;
-      z-index: 0;
-    }
-    @keyframes rotate-border {
-      100% { transform: rotate(360deg); }
-    }
-    .leaderboard-inner {
-      background: #0d1522;
+      border: 1px solid var(--border-color);
       border-radius: 12px;
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
+      overflow: hidden;
     }
     .leaderboard-table-wrap table {
       width: 100%;
@@ -716,12 +692,6 @@
       border: 1px solid rgba(0, 255, 170, 0.12);
     }
 
-    
-    /* ─── Preview Table Details ─── */
-    @media (max-width: 600px) {
-      .extended-col { display: none; }
-    }
-
     /* Responsive */
     @media (max-width: 768px) {
       .hero { padding: 80px 20px 60px; }
@@ -741,32 +711,43 @@
   <!-- ═══════ HERO ═══════ -->
   <section class="hero">
     <div style="margin-bottom: 30px;">
-      <img src="image.png" alt="Alpha One Labs Logo" style="max-height: 120px; width: auto; filter: drop-shadow(0 0 20px rgba(0, 255, 170, 0.3));">
+      <a href="index.html">
+        <img src="image.png" alt="Alpha One Labs Logo" style="max-height: 120px; width: auto; filter: drop-shadow(0 0 20px rgba(0, 255, 170, 0.3));">
+      </a>
     </div>
     <h1>
-      <span class="gradient-text">Alpha One Labs</span>
+      <span class="gradient-text">Contributions dashboard</span>
     </h1>
-    <div class="hero-badge">
-      <span class="pulse"></span>
-      <span>SYSTEM ONLINE — GSOC 2026</span>
-    </div>
     <p>
-      Initialize your open-source journey. Contribute to Alpha One Labs, push the boundaries of education technology, and level up your engineering skills.
+      Tracking all pulse and activity across Alpha One Labs repositories.
     </p>
+    
+    <div style="margin-bottom: 40px; display: flex; justify-content: center; gap: 16px;">
+      <button id="btn-2025" class="view-prs-btn active-year" onclick="setYear(2025)" style="background: rgba(0, 255, 170, 0.08); border-color: var(--accent-cyan); color: var(--accent-cyan);">2025</button>
+      <button id="btn-2026" class="view-prs-btn" onclick="setYear(2026)">2026</button>
+    </div>
 
+    <!-- Status loading/error -->
+    <div id="status-message" style="color: var(--text-secondary); height: 30px; margin-bottom: 20px; font-family: var(--font-mono); font-size: 0.9rem;">
+      <i class="fas fa-satellite-dish fa-spin"></i> Initializing data link...
+    </div>
 
-    <div class="stats-row">
+    <div class="stats-row" id="stats-row">
       <div class="stat-item">
-        <div class="stat-value">100+</div>
-        <div class="stat-label">Contributors</div>
+        <div class="stat-value" id="stat-total">-</div>
+        <div class="stat-label">Total PRs</div>
       </div>
       <div class="stat-item">
-        <div class="stat-value">50+</div>
+        <div class="stat-value" id="stat-merged">-</div>
         <div class="stat-label">Merged PRs</div>
       </div>
       <div class="stat-item">
-        <div class="stat-value">2025</div>
-        <div class="stat-label">First GSoC Year</div>
+        <div class="stat-value" id="stat-open">-</div>
+        <div class="stat-label">Open PRs</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="stat-closed">-</div>
+        <div class="stat-label">Closed PRs</div>
       </div>
     </div>
   </section>
@@ -774,45 +755,33 @@
   <!-- ═══════ LEADERBOARD ═══════ -->
   <section class="leaderboard-section reveal">
     <div style="text-align:center;">
-      <h2 class="section-title"><span class="accent">Contributor Leaderboard</span></h2>
-      <p class="section-subtitle">Recognizing top contributors ranked by merged pull requests</p>
+      <h2 class="section-title"><span class="accent">Student Leaderboard</span></h2>
+      <p class="section-subtitle">Ranked by total pull requests</p>
     </div>
 
     <div class="leaderboard-table-wrap">
-      <div class="leaderboard-inner">
-        <table>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Contributor</th>
-              <th>Merged</th>
-              <th class="extended-col">Open</th>
-              <th class="extended-col">Closed</th>
-              <th class="extended-col">Total</th>
-            </tr>
-          </thead>
-          <tbody id="leaderboard-preview-body">
-            <tr>
-              <td colspan="6" style="text-align: center; color: var(--text-muted); font-family: var(--font-mono); font-size: 0.9rem;">
-                <i class="fas fa-satellite-dish fa-spin"></i> Initializing live telemetry...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="table-note" id="leaderboard-preview-note" style="padding: 20px;">
-          // fetching real-time GSoC data
-        </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Contributor</th>
+            <th>Merged</th>
+            <th>Open</th>
+            <th>Closed</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-body">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+      <div class="table-note" id="leaderboard-note">
+        // data initializing...
       </div>
-    </div>
-
-    <div style="text-align:center; margin-top:32px;">
-      <a href="contributions.html" class="view-prs-btn" style="background: linear-gradient(135deg, rgba(0, 255, 170, 0.08), rgba(0, 180, 255, 0.08)); border-color: var(--accent-cyan); font-size: 1.05rem; padding: 14px 32px; box-shadow: var(--glow-cyan); letter-spacing: 0.05em; border-radius: 12px;">
-        <i class="fas fa-code-branch"></i> View All Pull Requests
-      </a>
     </div>
   </section>
 
-  <!-- ═══════ TIPS ═══════ -->
+  <!-- ═══════ JAVASCRIPT LOGIC ═══════ -->
   <section class="tips-section reveal">
     <div style="text-align:center;">
       <h2 class="section-title"><span class="accent">Essential Protocols</span></h2>
@@ -1231,68 +1200,171 @@
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     
-    // ─── Live Leaderboard Preview ───
-    async function initLeaderboardPreview() {
+    // ─── GitHub API Logic ───
+    let currentYear = 2026;
+    let isLoading = false;
+
+    async function fetchAllPRs(year) {
+      let prs = [];
+      let page = 1;
+      const perPage = 100;
+      let totalCount = 0;
+      
+      const statusMsg = document.getElementById('status-message');
+      statusMsg.innerHTML = `<i class="fas fa-satellite-dish fa-spin"></i> Establishing link to GitHub for ${year}...`;
+
       try {
-        const res = await fetch(`https://api.github.com/search/issues?q=org:alphaonelabs+is:pr+created:2026-01-01..2026-12-31&per_page=100`);
-        if (!res.ok) throw new Error(`API error ${res.status}`);
-        const data = await res.json();
-        
-        let users = {};
-        data.items.forEach(pr => {
-          let state = pr.state;
-          let isMerged = pr.pull_request && pr.pull_request.merged_at !== null;
-          let type = 'open';
-          if (state === 'closed') type = isMerged ? 'merged' : 'closed';
-          
-          let login = pr.user?.login;
-          if (!login) return;
-          if (!users[login]) {
-             users[login] = { login, avatar: pr.user.avatar_url, total: 0, merged: 0, open: 0, closed: 0 };
+        while (true) {
+          const res = await fetch(`https://api.github.com/search/issues?q=org:alphaonelabs+is:pr+created:${year}-01-01..${year}-12-31&per_page=${perPage}&page=${page}`);
+          if (!res.ok) {
+            if(res.status === 403) {
+              statusMsg.innerHTML = '<span style="color: #ffaa00;"><i class="fas fa-exclamation-triangle"></i> GitHub API rate limit exceeded. Showing partial data.</span>';
+              break;
+            }
+            throw new Error(`API error ${res.status}`);
           }
-          users[login].total++;
-          users[login][type]++;
-        });
-        
-        let leaderboard = Object.values(users).sort((a,b) => {
-          if (b.total !== a.total) return b.total - a.total;
-          return b.merged - a.merged;
-        });
-        
-        const tbody = document.getElementById('leaderboard-preview-body');
-        if (tbody && leaderboard.length > 0) {
-          tbody.innerHTML = '';
-          const topRanks = ['🥇', '🥈', '🥉'];
-          leaderboard.slice(0, 5).forEach((user, index) => {
-            let rankStr = index < 3 ? `<span style="font-size:1.3rem;">${topRanks[index]}</span>` : `#${index + 1}`;
-            tbody.innerHTML += `
-              <tr>
-                <td>${rankStr}</td>
-                <td>
-                  <a href="https://github.com/alphaonelabs/alphaonelabs-education-website/pulls?q=is%3Apr+author%3A${user.login}"
-                     target="_blank" rel="noopener noreferrer" class="contributor-link">
-                    <img class="contributor-avatar" style="width: 32px; height: 32px;" src="${user.avatar}" alt="${user.login}" loading="lazy" />
-                    <span>${user.login}</span>
-                  </a>
-                </td>
-                <td><span class="data-label" style="color:var(--accent-cyan); border-color:var(--accent-cyan); border-radius: 6px; padding: 4px 12px; font-size: 0.8rem;">${user.merged}</span></td>
-                <td class="extended-col"><span class="data-label" style="color:#facc15; border-color:#facc15; border-radius: 6px; padding: 4px 12px; font-size: 0.8rem;">${user.open}</span></td>
-                <td class="extended-col"><span class="data-label" style="color:#f87171; border-color:#f87171; border-radius: 6px; padding: 4px 12px; font-size: 0.8rem;">${user.closed}</span></td>
-                <td class="extended-col"><span class="data-label" style="background:var(--accent-cyan); color:var(--bg-primary); border-radius: 6px; padding: 4px 12px; font-size: 0.8rem;">${user.total}</span></td>
-              </tr>
-            `;
-          });
-          document.getElementById('leaderboard-preview-note').innerText = `// showing top ${Math.min(5, leaderboard.length)} contributors. View full dashboard for all metrics.`;
+          const data = await res.json();
+          totalCount = data.total_count;
+          prs = prs.concat(data.items);
+          
+          if (prs.length >= totalCount || data.items.length === 0 || page >= 10) { // Limit to 10 pages locally (1000 PRs max)
+            break;
+          }
+          statusMsg.innerHTML = `<i class="fas fa-satellite-dish fa-spin"></i> Fetching records... (${prs.length}/${totalCount})`;
+          page++;
+          // Small delay to prevent rate limits sometimes
+          await new Promise(r => setTimeout(r, 500));
         }
-      } catch (e) { 
-        console.error("Preview fetch error:", e);
-        const tbody = document.getElementById('leaderboard-preview-body');
-        if (tbody) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#ff4444;"><i class="fas fa-exclamation-triangle"></i> Failed to load live telemetry data.</td></tr>`;
+        
+        if (statusMsg.innerHTML.includes('Fetching records') || statusMsg.innerHTML.includes('Establishing')) {
+          statusMsg.innerHTML = '<span style="color: var(--accent-cyan);"><i class="fas fa-check-circle"></i> Telemetry synchronized successfully.</span>';
+          setTimeout(() => { if (!isLoading) statusMsg.innerHTML = ''; }, 3000);
+        }
+        return prs;
+      } catch (err) {
+        console.error(err);
+        statusMsg.innerHTML = `<span style="color: #ff4444;"><i class="fas fa-times-circle"></i> Error fetching telemetry: ${err.message}</span>`;
+        return prs;
       }
     }
-    
-    // Defer so it doesn't block pageload
-    setTimeout(initLeaderboardPreview, 500);
+
+    function processPRData(prs) {
+      let total = prs.length;
+      let merged = 0;
+      let open = 0;
+      let closed = 0;
+      let users = {};
+
+      prs.forEach(pr => {
+        let state = pr.state;
+        let isMerged = pr.pull_request && pr.pull_request.merged_at !== null;
+        
+        let type = 'open';
+        if (state === 'closed') {
+          if (isMerged) {
+            type = 'merged';
+            merged++;
+          } else {
+            type = 'closed';
+            closed++;
+          }
+        } else {
+          open++;
+        }
+
+        let userConfig = pr.user;
+        if (!userConfig) return;
+        let login = userConfig.login;
+        
+        if (!users[login]) {
+          users[login] = {
+            login: login,
+            avatar: userConfig.avatar_url,
+            total: 0,
+            merged: 0,
+            open: 0,
+            closed: 0
+          };
+        }
+        users[login].total++;
+        users[login][type]++;
+      });
+
+      return {
+        stats: { total, merged, open, closed },
+        leaderboard: Object.values(users).sort((a, b) => {
+          if (b.total !== a.total) return b.total - a.total;
+          return b.merged - a.merged;
+        })
+      };
+    }
+
+    function renderStats(stats) {
+      document.getElementById('stat-total').innerText = stats.total;
+      document.getElementById('stat-merged').innerText = stats.merged;
+      document.getElementById('stat-open').innerText = stats.open;
+      document.getElementById('stat-closed').innerText = stats.closed;
+    }
+
+    function renderLeaderboard(leaderboard) {
+      const tbody = document.getElementById('leaderboard-body');
+      tbody.innerHTML = '';
+      
+      const topRanks = ['��', '🥈', '🥉'];
+      
+      leaderboard.forEach((user, index) => {
+        let rankStr = index < 3 ? `<span style="font-size:1.3rem;">${topRanks[index]}</span>` : `#${index + 1}`;
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${rankStr}</td>
+          <td>
+            <a href="https://github.com/alphaonelabs/alphaonelabs-education-website/pulls?q=is%3Apr+author%3A${user.login}"
+               target="_blank" rel="noopener noreferrer" class="contributor-link">
+              <img class="contributor-avatar"
+                   src="${user.avatar}"
+                   alt="${user.login}"
+                   width="36" height="36" loading="lazy" />
+              <span>${user.login}</span>
+            </a>
+          </td>
+          <td><span class="data-label" style="color:var(--accent-cyan); border-color:var(--accent-cyan);">${user.merged}</span></td>
+          <td><span class="data-label" style="color:#facc15; border-color:#facc15;">${user.open}</span></td>
+          <td><span class="data-label" style="color:#f87171; border-color:#f87171;">${user.closed}</span></td>
+          <td><span class="data-label" style="background:var(--accent-cyan); color:var(--bg-primary);">${user.total}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      document.getElementById('leaderboard-note').innerText = `// showing ${leaderboard.length} contributors`;
+    }
+
+    window.setYear = async function(year) {
+      if (isLoading) return;
+      isLoading = true;
+      currentYear = year;
+      
+      // Update buttons
+      document.getElementById('btn-2025').style = '';
+      document.getElementById('btn-2026').style = '';
+      document.getElementById(`btn-${year}`).style = 'background: rgba(0, 255, 170, 0.08); border-color: var(--accent-cyan); color: var(--accent-cyan);';
+
+      // Clear current data
+      document.getElementById('stat-total').innerText = '-';
+      document.getElementById('stat-merged').innerText = '-';
+      document.getElementById('stat-open').innerText = '-';
+      document.getElementById('stat-closed').innerText = '-';
+      document.getElementById('leaderboard-body').innerHTML = '';
+      document.getElementById('leaderboard-note').innerText = '// data initializing...';
+
+      const prs = await fetchAllPRs(year);
+      const data = processPRData(prs);
+      renderStats(data.stats);
+      renderLeaderboard(data.leaderboard);
+      
+      isLoading = false;
+    };
+
+    // Initialize
+    setYear(2026);
 
     // ─── FAQ Toggle ───
     function toggleFaq(el) {
