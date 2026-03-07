@@ -15,8 +15,8 @@ DEFAULT_OUTPUT_PATH = "data/leaderboard.json"
 # python scripts/generate_leaderboard.py --start-date 2024-09-01 \
 # --end-date 2025-06-01 --output data/leaderboard-2025.json
 REPO_CANDIDATES = [
-    ("alphaonelabs", "alphaonelabs-education-website"),
-    ("AlphaOneLabs", "education-website"),
+    ("alphaonelabs", "website"),
+    ("AlphaOneLabs", "website"),
 ]
 MAX_CLOSED_PAGES = 10
 MAX_OPEN_PAGES = 5
